@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>Study Beast</title>
+	<style>
+		:root {
+			--bg-1: #0f172a;
+			--bg-2: #1f2937;
+			--bg-3: #0b1022;
+			--panel: rgba(17, 24, 39, .72);
+			--panel-solid: #111827;
+			--text: #e5e7eb;
+			--muted: #cbd5e1;
+			--accent: #60a5fa;
+			--accent-2: #34d399;
+			--danger: #f87171;
+			--glass-border: rgba(255,255,255,.12);
+			--shadow: 0 10px 30px rgba(0,0,0,.35);
+		}
+		* { box-sizing: border-box; }
+		html, body { margin: 0; height: 100%; }
+		body {
+			font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+			color: var(--text);
+			min-height: 100%;
+			background: radial-gradient(1200px 1200px at 10% 10%, #1d2a5a 0%, transparent 60%),
+			            radial-gradient(1200px 1200px at 90% 30%, #16384f 0%, transparent 60%),
+			            linear-gradient(120deg, var(--bg-1), var(--bg-2) 60%, var(--bg-3));
+			background-attachment: fixed;
+			animation: floatBg 18s ease-in-out infinite alternate;
+		}
+		@keyframes floatBg {
+			0% { background-position: 0px 0px, 0px 0px, 0px 0px; }
+			100% { background-position: -40px -30px, 40px 20px, 0px 0px; }
+		}
+
+		header, footer {
+			background: linear-gradient(180deg, rgba(10,16,36,.8), rgba(10,16,36,.5));
+			backdrop-filter: blur(6px);
+			-webkit-backdrop-filter: blur(6px);
+			border-bottom: 1px solid var(--glass-border);
+			padding: 14px 20px;
+			box-shadow: var(--shadow);
+		}
+		header h1 { margin: 0; font-weight: 700; letter-spacing: .3px; }
+		footer { border-top: 1px solid var(--glass-border); border-bottom: none; margin-top: 10px; }
+
+		main { display: flex; min-height: calc(100vh - 112px); gap: 14px; padding: 14px; }
+
+		.sidebar {
+			width: 240px;
+			background: var(--panel);
+			border: 1px solid var(--glass-border);
+			border-radius: 14px;
+			padding: 12px;
+			display: flex; flex-direction: column; gap: 10px;
+			box-shadow: var(--shadow);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			height: fit-content;
+			position: sticky; top: 12px; align-self: flex-start;
+		}
+		.sidebar a {
+			background: rgba(31, 41, 55, .6);
+			color: var(--text);
+			border: 1px solid var(--glass-border);
+			padding: 10px 12px;
+			border-radius: 10px;
+			text-decoration: none;
+			transition: border-color .2s, transform .05s ease-in-out;
+		}
+		.sidebar a:hover { border-color: var(--accent); transform: translateY(-1px); }
+		.muted { color: var(--muted); }
+
+		.content {
+			flex: 1;
+			display: grid;
+			gap: 14px;
+			align-content: start;
+		}
+
+		/* Views with study background images via ::before overlay */
+		.view {
+			display: none;
+			position: relative;
+			padding: 16px;
+			border-radius: 16px;
+			overflow: hidden;
+			border: 1px solid var(--glass-border);
+			background: rgba(11,16,34,.55);
+			box-shadow: var(--shadow);
+			backdrop-filter: blur(6px);
+			-webkit-backdrop-filter: blur(6px);
+		}
+		.view h2 { margin-top: 0; text-shadow: 0 2px 10px rgba(0,0,0,.35); }
+
+		/* Background images (Unsplash) with soft overlay and blur for readability */
+		.view::before {
+			content: "";
+			position: absolute; inset: 0;
+			background-size: cover; background-position: center;
+			filter: brightness(.7) saturate(1.05);
+			transform: scale(1.02);
+			z-index: 0;
+		}
+		.view::after {
+			content: "";
+			position: absolute; inset: 0;
+			background: radial-gradient(800px 400px at 15% 10%, rgba(96,165,250,.15), transparent 60%),
+			            radial-gradient(700px 400px at 85% 15%, rgba(52,211,153,.12), transparent 60%),
+			            linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.45));
+			backdrop-filter: blur(1.5px);
+			-webkit-backdrop-filter: blur(1.5px);
+			z-index: 0;
+		}
+		.view > * { position: relative; z-index: 1; }
+
+		/* Specific study images per section */
+		#home { display: block; }
+		#home::before {
+			background-image: url('https://images.unsplash.com/photo-1513258496099-48168024aec0?q=80&w=1600&auto=format&fit=crop');
+		}
+		#learn::before {
+			background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop'); /* laptop + notes */
+		}
+		#practice::before {
+			background-image: url('https://images.unsplash.com/photo-1484417894907-623942c8ee29?q=80&w=1600&auto=format&fit=crop'); /* coding screen */
+		}
+		#revision::before {
+			background-image: url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=1600&auto=format&fit=crop'); /* notebook + pen */
+		}
+		#chat::before {
+			background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1600&auto=format&fit=crop'); /* library books */
+		}
+
+		.card {
+			background: rgba(10, 16, 36, .66);
+			border: 1px solid var(--glass-border);
+			border-radius: 12px;
+			padding: 12px;
+			margin: 10px 0;
+			box-shadow: 0 6px 20px rgba(0,0,0,.35);
+		}
+		.row { display: flex; gap: 8px; margin: 8px 0; flex-wrap: wrap; }
+		select, input[type="text"] {
+			background: rgba(17, 24, 39, .8);
+			color: var(--text);
+			border: 1px solid var(--glass-border);
+			padding: 8px; border-radius: 8px;
+		}
+
+		/* MCQ (CSS-only feedback) */
+		.mcq { margin: 14px 0; }
+		.mcq h3 { margin: 6px 0 10px; font-size: 1.02rem; }
+		.mcq .opt {
+			display: block; margin: 6px 0;
+			background: rgba(17, 24, 39, .7);
+			border: 1px solid var(--glass-border);
+			border-radius: 10px; padding: 10px;
+			transition: border-color .2s, background .2s;
+		}
+		.mcq .opt:hover { border-color: rgba(255,255,255,.2); background: rgba(17, 24, 39, .8); }
+		.mcq input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+		.mcq label { display: inline-block; cursor: pointer; width: 100%; }
+		.mcq .fb { display: none; margin-top: 6px; font-size: .95rem; }
+		.mcq .fb.ok { color: var(--accent-2); }
+		.mcq .fb.no { color: var(--danger); }
+		.mcq input:checked + label + .fb { display: block; }
+		.mcq input:checked + label { outline: 2px solid rgba(148,163,184,.4); border-radius: 6px; }
+
+		/* FAQ details */
+		details {
+			background: rgba(17, 24, 39, .7);
+			border: 1px solid var(--glass-border);
+			border-radius: 10px; padding: 8px 10px; margin: 8px 0;
+			transition: border-color .2s, background .2s;
+		}
+		details:hover { border-color: rgba(255,255,255,.2); background: rgba(17, 24, 39, .8); }
+		summary { cursor: pointer; }
+
+		/* Simple anchor target state (subtle) */
+		:target ~ .sidebar a { border-color: var(--glass-border); }
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Study Beast</h1>
+	</header>
+
+	<main>
+		<section class="content">
+			<!-- Home -->
+			<section id="home" class="view">
+				<h2>Welcome</h2>
+				<div class="card">
+					<p>Success is the sum of small efforts repeated day in and day out.</p>
+				</div>
+			</section>
+
+			<!-- Learn -->
+			<section id="learn" class="view">
+				<h2>Learn</h2>
+				<div class="card">
+					<h3>Time Complexity Basics</h3>
+					<p>Time complexity estimates how running time grows with input size n.</p>
+					<ul>
+						<li>O(1): constant</li>
+						<li>O(log n): logarithmic</li>
+						<li>O(n): linear</li>
+						<li>O(n log n): e.g., mergesort</li>
+						<li>O(n^2): nested loops</li>
+					</ul>
+					<p>Focus on the dominant term; drop constants.</p>
+				</div>
+				<div class="card">
+					<h3>Arrays in CSE</h3>
+					<p>Arrays store items contiguously. Access by index is O(1).</p>
+					<p>Insert/delete at end can be O(1) amortized; middle is O(n).</p>
+				</div>
+				<div class="card">
+					<h3>Sorting Overview</h3>
+					<p>Bubble (O(n^2)), Merge (O(n log n)), Quick (avg O(n log n)).</p>
+					<p>Stable keeps equal items ordered; in-place uses little extra memory.</p>
+				</div>
+			</section>
+
+			<!-- Practice -->
+			<section id="practice" class="view">
+				<h2>Practice</h2>
+
+				<div class="card mcq" id="q1">
+					<h3>What is the time complexity of accessing an array element by index?</h3>
+					<div class="opt">
+						<input type="radio" name="q1" id="q1o1"/>
+						<label for="q1o1">O(n)</label>
+						<div class="fb no">Not quite. Index access is constant time.</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="q1" id="q1o2"/>
+						<label for="q1o2">O(1)</label>
+						<div class="fb ok">Correct! Indexing uses pointer arithmetic → O(1).</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="q1" id="q1o3"/>
+						<label for="q1o3">O(log n)</label>
+						<div class="fb no">No. There's no search tree here.</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="q1" id="q1o4"/>
+						<label for="q1o4">O(n^2)</label>
+						<div class="fb no">Too high for a single access.</div>
+					</div>
+				</div>
+
+				<div class="card mcq" id="q2">
+					<h3>Inserting in the middle of an array is typically:</h3>
+					<div class="opt">
+						<input type="radio" name="q2" id="q2o1"/>
+						<label for="q2o1">O(1)</label>
+						<div class="fb no">Requires shifting elements, not O(1).</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="q2" id="q2o2"/>
+						<label for="q2o2">O(log n)</label>
+						<div class="fb no">Not logarithmic; shifting scales with n.</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="q2" id="q2o3"/>
+						<label for="q2o3">O(n)</label>
+						<div class="fb ok">Correct! Elements must shift → O(n).</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="q2" id="q2o4"/>
+						<label for="q2o4">O(n log n)</label>
+						<div class="fb no">Too high for a single insert.</div>
+					</div>
+				</div>
+
+				<div class="card mcq" id="q3">
+					<h3>Average-case time for mergesort:</h3>
+					<div class="opt">
+						<input type="radio" name="q3" id="q3o1"/>
+						<label for="q3o1">O(n)</label>
+						<div class="fb no">Too low; merging across levels adds log n factor.</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="q3" id="q3o2"/>
+						<label for="q3o2">O(n log n)</label>
+						<div class="fb ok">Correct! Divide and merge → O(n log n).</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="q3" id="q3o3"/>
+						<label for="q3o3">O(n^2)</label>
+						<div class="fb no">That's bubble/insertion in worst cases, not merge.</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="q3" id="q3o4"/>
+						<label for="q3o4">O(log n)</label>
+						<div class="fb no">Too low; you must process all elements.</div>
+					</div>
+				</div>
+
+				<div class="card mcq" id="q4">
+					<h3>Which term dominates in 3n^2 + 10n + 5 as n grows?</h3>
+					<div class="opt">
+						<input type="radio" name="q4" id="q4o1"/>
+						<label for="q4o1">3n^2</label>
+						<div class="fb ok">Correct! n^2 term dominates; constants don't matter.</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="q4" id="q4o2"/>
+						<label for="q4o2">10n</label>
+						<div class="fb no">n term grows slower than n^2.</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="q4" id="q4o3"/>
+						<label for="q4o3">5</label>
+						<div class="fb no">Constant is negligible for large n.</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="q4" id="q4o4"/>
+						<label for="q4o4">n log n</label>
+						<div class="fb no">n log n < n^2 for large n.</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Revision -->
+			<section id="revision" class="view">
+				<h2>Revision</h2>
+				<div class="card">
+					<p class="muted">Use these to revise commonly missed questions.</p>
+				</div>
+
+				<div class="card mcq">
+					<h3>Array access time is:</h3>
+					<div class="opt">
+						<input type="radio" name="rq1" id="rq1a1"/>
+						<label for="rq1a1">O(n)</label>
+						<div class="fb no">No, it's constant for index access.</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="rq1" id="rq1a2"/>
+						<label for="rq1a2">O(1)</label>
+						<div class="fb ok">Correct!</div>
+					</div>
+				</div>
+
+				<div class="card mcq">
+					<h3>Average-case time for mergesort:</h3>
+					<div class="opt">
+						<input type="radio" name="rq2" id="rq2a1"/>
+						<label for="rq2a1">O(n log n)</label>
+						<div class="fb ok">Correct!</div>
+					</div>
+					<div class="opt">
+						<input type="radio" name="rq2" id="rq2a2"/>
+						<label for="rq2a2">O(n^2)</label>
+						<div class="fb no">Too slow for mergesort.</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- “Chat” (FAQ style) -->
+			<section id="chat" class="view">
+				<h2>Chat (Static FAQ)</h2>
+				<div class="card">
+					<details>
+						<summary>Explain time complexity</summary>
+						<p>Think about how runtime grows with n. Keep only the dominant term (big-O), and ignore constants.</p>
+					</details>
+					<details>
+						<summary>Give a practice question on arrays</summary>
+						<p><strong>Q:</strong> Access time for array by index?<br/> <strong>A:</strong> O(1) — pointer arithmetic.</p>
+					</details>
+					<details>
+						<summary>How should I revise?</summary>
+						<p>Redo questions you missed. Space your practice and repeat until you can answer without hesitation.</p>
+					</details>
+					<details>
+						<summary>Explain sorting overview</summary>
+						<p>Bubble is O(n^2); Merge and average Quick are O(n log n). Stability preserves order of equals; in-place uses little extra memory.</p>
+					</details>
+				</div>
+			</section>
+		</section>
+
+		<nav class="sidebar">
+			<a href="#home">Home</a>
+			<a href="#learn">Learn</a>
+			<a href="#practice">Practice</a>
+			<a href="#revision">Revision</a>
+			<a href="#chat">Chat</a>
+			<div class="muted" style="margin-top:8px;"></div>
+		</nav>
+	</main>
+
+	<footer>
+		<small>&copy; 2025 My LMS</small>
+	</footer>
+</body>
+</html>
