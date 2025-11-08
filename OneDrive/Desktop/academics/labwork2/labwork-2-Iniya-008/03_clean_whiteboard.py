@@ -25,10 +25,20 @@ text = input("Enter text: ")
 
 # TODO 2 – Manual cleanup using a loop and a flag variable.
 clean_manual = ""
+for i in range(len(text)):
+    if text[i]==' ' or text[i]=='\t':
+        if len(clean_manual)==0 or clean_manual[-1]==' ':
+            continue
+        else:
+            clean_manual+=' '
+
 # HINT: iterate characters, treat ' ' and '\t' as whitespace; collapse multiples; trim ends
 
 # TODO 3 – Use split() + " ".join() for the same task.
 clean_builtin = ""
+words = text.split()
+clean_builtin = " ".join(words) 
+
 
 # TODO 4 – Print both results.
 print(clean_manual)

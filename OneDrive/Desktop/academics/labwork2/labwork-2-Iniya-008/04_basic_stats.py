@@ -27,15 +27,27 @@ n = int(input("Number of marks: "))
 nums = list(map(int, input("Enter marks: ").split()))
 
 # TODO 1 – Manual calculation using a loop.
-min_manual = 0
-max_manual = 0
-avg_manual = 0.0
+min_manual = nums[0]
+max_manual = nums[0]
+total=0
+for i in nums:
+    if i<min_manual:
+        min_manual=i
+    if i>max_manual:
+        max_manual=i
+    total+=i
+avg_manual=total/n
+    
+
+
+
 # HINT: initialize min/max to first element; accumulate total
 
 # TODO 2 – Use built-ins min(), max(), sum(), len().
-min_builtin = 0
-max_builtin = 0
-avg_builtin = 0.0
+min_builtin = min(nums)
+max_builtin = max(nums)
+avg_builtin = sum(nums)/n
+
 
 # TODO 3 – Print both results.
 print(min_manual, max_manual, round(avg_manual, 2))

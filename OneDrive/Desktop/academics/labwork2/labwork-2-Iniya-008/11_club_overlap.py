@@ -25,10 +25,21 @@ B = [x.strip() for x in input("Student B clubs: ").split(",") if x.strip()]
 
 # TODO 1 – Manual loop comparisons.
 common_manual, onlyA_manual, onlyB_manual = [], [], []
+for i in A:
+    if i in B:
+        common_manual.append(i)
+    else:
+        onlyA_manual.append(i)
+for i in B:
+    if i not in A:
+        onlyB_manual.append(i)
 # HINT: build each list by checking membership in the other
 
 # TODO 2 – Set operations.
 common_builtin, onlyA_builtin, onlyB_builtin = [], [], []
+common_builtin=set(A) & set(B)
+onlyA_builtin=set(A)-set(B)
+onlyB_builtin=set(B)-set(A)
 # HINT: convert to sets; use &: intersection, -: difference
 
 print(f"{','.join(sorted(common_manual))}|{','.join(sorted(onlyA_manual))}|{','.join(sorted(onlyB_manual))}")

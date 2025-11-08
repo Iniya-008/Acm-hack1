@@ -31,11 +31,14 @@ word = input("Enter a word: ").strip()
 
 # TODO 2
 reverse_manual = ""
+for ch in range(len(word)-1,-1,-1):
+    reverse_manual+=word[ch]
 #pushing code
 # HINT: iterate over each character ch in word and set reverse_manual = ch + reverse_manual
 
 # TODO 3
-reverse_builtin = ""  # HINT: use slicing word[::-1]
+reverse_builtin = "" 
+reverse_builtin=word[::-1] # HINT: use slicing word[::-1]
 
 # TODO 4
 print(reverse_manual)

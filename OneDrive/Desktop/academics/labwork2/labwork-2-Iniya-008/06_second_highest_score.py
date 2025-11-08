@@ -22,10 +22,16 @@ scores = list(map(int, input("Enter scores: ").split()))
 
 # TODO 1 – Manual: track largest and second largest.
 second_manual = 0
+largest=max(scores)
+scores.remove(largest)
+second_manual=max(scores)
+
 # HINT: iterate and update 'largest' and 'second'
 
 # TODO 2 – Built-in: sort descending and pick the second distinct value.
 second_builtin = 0
+sorted(scores,reverse=True)
+second_builtin=scores[2]
 # HINT: sorted(scores, reverse=True)
 
 print(second_manual)

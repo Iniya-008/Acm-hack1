@@ -22,10 +22,14 @@ names = input("Enter names: ").split()
 
 # TODO 1 – Manual removal using a “seen” list.
 unique_manual = []
+for i in names:
+    if i not in unique_manual:
+        unique_manual.append(i)
 # HINT: for each name, if not already in a 'seen' list, append to both
 
 # TODO 2 – Built-in method using dict.fromkeys().
 unique_builtin = []
+unique_builtin = list(dict.fromkeys(names))
 
 print(" ".join(unique_manual))
 print(" ".join(unique_builtin))

@@ -30,11 +30,17 @@ sentence = input("Enter a sentence: ")
 
 # TODO 2
 vowel_count_manual = 0
+for ch in sentence:
+    if ch in "aeiouAEIOU":
+        vowel_count_manual+=1
 # HINT: check ch in "aeiouAEIOU"
 
 # TODO 3
 vowels = set("aeiou")
 vowel_count_builtin = 0
+for ch in sentence.lower():
+    if ch in vowels:
+        vowel_count_builtin+=1
 # HINT: for ch in sentence.lower(): if ch in vowels: increment
 
 # TODO 4
